@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../components/Modal';
-import { useNavigate } from "react-router-dom";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 const Home = () => {
-  const {store, dispatch} =useGlobalReducer()
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDelete = () => {
@@ -20,7 +16,6 @@ const Home = () => {
  		<p>Direccion</p>
  		<p>Telefono</p>
  		<p>Correo</p>
-		<button onClick={() => navigate("/form")}>Ir al Formulario</button>
       <button onClick={() => setIsModalOpen(true)}>Eliminar Contacto</button>
 
       <Modal
