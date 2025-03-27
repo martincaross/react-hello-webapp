@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Card } from "react-bootstrap";
+import useGlobalReducer from "../hooks/useGlobalReducer";  // Importar el hook del estado global
 
 const AddContact = () => {
+  const { store } = useGlobalReducer();  // Obtener el estado global
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -20,7 +22,7 @@ const AddContact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    fetch("https://playground.4geeks.com/contact/agendas/mi_agenda/contacts", {
+    fetch(`https://playground.4geeks.com/contact/agendas/${store.selectedAgenda}/contacts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

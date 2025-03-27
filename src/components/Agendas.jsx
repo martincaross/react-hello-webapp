@@ -1,70 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
+import useGlobalReducer from "../hooks/useGlobalReducer";  // Usamos el hook para acceso al estado global
 
 const Agendas = () => {
-  const [isAgendaModalOpen, setIsAgendaModalOpen] = useState(false); // Estado para abrir el modal de opciones
-  const [selectedAgenda, setSelectedAgenda] = useState(""); // Estado para almacenar la agenda seleccionada
+  const { store, dispatch } = useGlobalReducer(); // Obtener el estado y dispatch desde el contexto global
+  const [isAgendaModalOpen, setIsAgendaModalOpen] = useState(false);
+  const [agendas, setAgendas] = useState([]);
 
-  // Función para abrir el modal con los botones
-  const handleOpenAgendaModal = () => {
-    setIsAgendaModalOpen(true);
-  };
+  useEffect(() => {
+    // Cargar las agendas desde la API
+    fetch("https://playground.4geeks.com/contact/agendas")
+      .then(response => response.json())
+      .then(data => {
+        if (data.agendas) {
+          setAgendas(data.agendas);
+        } else {
+          console.error("No se encontró un array de agendas:", data);
+        }
+      })
+      .catch(error => console.error("Error al obtener agendas:", error));
+  }, []);
 
-  // Función para cerrar el modal con los botones
-  const handleCloseAgendaModal = () => {
-    setIsAgendaModalOpen(false);
-  };
+  const handleOpenAgendaModal = () => setIsAgendaModalOpen(true);
+  const handleCloseAgendaModal = () => setIsAgendaModalOpen(false);
 
-  // Lista de nombres de agendas aleatorias
-  const agendas = [
-    "Agenda 1",
-    "Agenda 2",
-    "Agenda 3",
-    "Agenda 4",
-    "Agenda 5"
-  ];
-
-  // Manejar el cambio en el selector de agendas
+  // Manejar la selección de agenda
   const handleAgendaChange = (event) => {
-    setSelectedAgenda(event.target.value);
+    const selectedAgenda = event.target.value;
+    dispatch({ type: "SET_SELECTED_AGENDA", payload: selectedAgenda });  // Actualizamos el estado global con la agenda seleccionada
   };
 
   return (
     <div>
-      {/* Botón para abrir el modal de opciones de agenda */}
       <Button variant="success" onClick={handleOpenAgendaModal}>
-        Agenda
+        Seleccionar Agenda
       </Button>
 
-      {/* Modal con opciones para Nueva agenda, Seleccionar agenda y Eliminar agenda */}
       <Modal show={isAgendaModalOpen} onHide={handleCloseAgendaModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Gestión de Agendas</Modal.Title>
+          <Modal.Title>Seleccionar Agenda</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="d-grid gap-2">
-            {/* Seleccionar Agenda */}
-            <Form.Group className="mb-3">
-              <Form.Control as="select" value={selectedAgenda} onChange={handleAgendaChange}>
-                <option value="">Seleccione una agenda</option>
-                {agendas.map((agenda, index) => (
-                  <option key={index} value={agenda}>
-                    {agenda}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-
-            {/* Botón Nueva Agenda */}
-            <Button variant="primary" className="mb-2 w-100">
-              Nueva Agenda
-            </Button>
-
-            {/* Botón Eliminar Agenda */}
-            <Button variant="danger" className="mb-2 w-100">
-              Eliminar Agenda Actual
-            </Button>
-          </div>
+          <Form.Group className="mb-3">
+            <Form.Control as="select" value={store.selectedAgenda} onChange={handleAgendaChange}>
+              <option value="">Seleccione una agenda</option>
+              {agendas.map((agenda) => (
+                <option key={agenda.id} value={agenda.slug}>
+                  {agenda.slug}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseAgendaModal}>

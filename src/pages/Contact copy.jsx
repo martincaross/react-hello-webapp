@@ -12,30 +12,42 @@ const Contact = () => {
   const [isAgendasModalOpen, setIsAgendasModalOpen] = useState(false); // Modal de Agendas
   const [selectedContact, setSelectedContact] = useState(null);
 
-  const handleDelete = () => {
-    alert("Contacto eliminado"); // Aquí podrías eliminarlo realmente
-    setIsModalOpen(false);
+  // Lista de contactos de prueba (debería venir de un estado global o API)
+  const [contacts, setContacts] = useState([]);
+  
+  useEffect(() => {
+    fetch("https://playground.4geeks.com/contact/agendas/mi_agenda/contacts")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Respuesta de la API:", data); // Verifica la estructura en la consola
+        if (Array.isArray(data.contacts)) {
+          setContacts(data.contacts); // Accede a la clave correcta
+        } else {
+          console.error("No se encontró un array de contactos:", data);
+          setContacts([]); // Evita errores
+        }
+      })
+      .catch((error) => console.error("Error al obtener contactos:", error));
+  }, []);
+
+  const handleDelete = (contactId) => {
+    fetch(`https://playground.4geeks.com/contact/agendas/mi_agenda/contacts/${contactId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error al eliminar contacto ${contactId}`);
+        }
+      })
+      .then(() => {
+        setContacts(contacts.filter((contact) => contact.id !== contactId)); // Actualiza la lista
+        setIsModalOpen(false); // Cierra el modal después de eliminar
+      })
+      .catch((error) => console.error("Error al eliminar contacto:", error));
   };
 
-  // Lista de contactos de prueba (debería venir de un estado global o API)
-  const [contacts, setContacts] = useState([{ "name": "Juan P", "phone": "123-456-789","email": "juan@example.com","address": "Calle 123","id": 89 },
-    { "name": "Juan P", "phone": "123-456-789","email": "juan@example.com","address": "Calle 123","id": 90 },
-    { "name": "Juan P","phone": "123-456-789","email": "juan@example.com","address": "Calle 123","id": 91 }]);
-
-    useEffect(() => {
-      fetch("https://playground.4geeks.com/contact/agendas/mi_agenda/contacts")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Respuesta de la API:", data); // Verifica la estructura en la consola
-          if (Array.isArray(data.contacts)) {
-            setContacts(data.contacts); // Accede a la clave correcta
-          } else {
-            console.error("No se encontró un array de contactos:", data);
-            setContacts([]); // Evita errores
-          }
-        })
-        .catch((error) => console.error("Error al obtener contactos:", error));
-    }, []);
+    
     
 
   return (
@@ -70,7 +82,7 @@ const Contact = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={handleDelete}
+        onConfirm={() => handleDelete(selectedContact.id)} // ✅ Llama a la función con el ID
       />
 
       
