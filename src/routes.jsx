@@ -1,11 +1,12 @@
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  Route,
+  Route
 } from "react-router-dom";
-import Home from "./pages/Home";
-import Form from "./pages/Form";
+import Contact from "./pages/Contact";
+import AddContact from "./pages/AddContact";
 import Layout from "./pages/Layout";
+import EditContact from "./pages/EditContact";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -13,8 +14,9 @@ export const router = createBrowserRouter(
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
 
       {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
-      <Route path= "/" element={<Home />} />
-      <Route path="/form" element={ <Form />} />
+      <Route path= "/" element={<Contact />} />
+      <Route path="/addcontact" element={ <AddContact />} />
+      <Route path="/editcontact/:id" element={<EditContact />} />
     </Route>
   )
 );

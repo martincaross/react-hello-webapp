@@ -1,55 +1,23 @@
-import React from 'react';
+import React from "react";
+import { Modal, Button } from "react-bootstrap";
 
-const Modal = ({ isOpen, onClose, onConfirm }) => {
-  if (!isOpen) return null; // No mostrar el modal si isOpen es false
-
+const ConfirmModal = ({ isOpen, onClose, onConfirm }) => {
   return (
-    <div style={modalOverlayStyle}>
-      <div style={modalStyle}>
-        <h3>¿Estás seguro de que quieres eliminar?</h3>
-        <button onClick={onConfirm} style={deleteButtonStyle}>Eliminar</button>
-        <button onClick={onClose} style={cancelButtonStyle}>Cancelar</button>
-      </div>
-    </div>
+    <Modal show={isOpen} onHide={onClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Confirmar eliminación</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>¿Estás seguro de que quieres eliminar este contacto?</Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onClose}>
+          Cancelar
+        </Button>
+        <Button variant="danger" onClick={onConfirm}>
+          Eliminar
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
-// Estilos básicos para el modal
-const modalOverlayStyle = {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
-const modalStyle = {
-  backgroundColor: 'white',
-  padding: '20px',
-  borderRadius: '5px',
-  textAlign: 'center',
-};
-
-const deleteButtonStyle = {
-  backgroundColor: 'red',
-  color: 'white',
-  padding: '10px',
-  margin: '5px',
-  border: 'none',
-  cursor: 'pointer',
-};
-
-const cancelButtonStyle = {
-  backgroundColor: 'gray',
-  color: 'white',
-  padding: '10px',
-  margin: '5px',
-  border: 'none',
-  cursor: 'pointer',
-};
-
-export default Modal;
+export default ConfirmModal;

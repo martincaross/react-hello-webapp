@@ -1,35 +1,42 @@
-// ContactCard.jsx
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useGlobalReducer } from "../hooks/useGlobalReducer";
-import Modal from "./Modal";
+import React from "react";
+import { Card, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 
-const ContactCard = ({ contact }) => {
-  const { dispatch } = useGlobalReducer();
-  const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-
-  const handleDelete = () => {
-    dispatch({ type: "DELETE_CONTACT", payload: contact.id });
-    setShowModal(false);
-  };
+const ContactCard = ({ contact, onDelete }) => {
+  const navigate = useNavigate(); // Hook para la navegación
 
   return (
-    <div className="card">
-      <h3>{contact.name}</h3>
-      <p>Email: {contact.email}</p>
-      <p>Teléfono: {contact.phone}</p>
-      <button onClick={() => navigate(`/edit/${contact.id}`)} className="btn btn-warning">Editar</button>
-      <button onClick={() => setShowModal(true)} className="btn btn-danger">Eliminar</button>
+    <Card className="d-flex flex-row align-items-center p-4 mb-3 shadow-sm">
+      {/* Imagen a la izquierda */}
+      <img
+        src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
+        alt="Contact"
+        className="img-fluid rounded-circle me-3"
+        style={{ width: "100px", height: "100px" }}
+      />
 
-      {showModal && (
-        <Modal 
-          message={`¿Estás seguro de que deseas eliminar a ${contact.name}?`} 
-          onConfirm={handleDelete} 
-          onCancel={() => setShowModal(false)}
-        />
-      )}
-    </div>
+      {/* Información del contacto */}
+      <div className="flex-grow-1">
+        <h5 className="mb-1">{contact.name}</h5>
+        <p className="mb-1 text-muted">{contact.address}</p>
+        <p className="mb-1">{contact.phone}</p>
+        <p className="mb-1">{contact.email}</p>
+      </div>
+
+      {/* Botones a la derecha */}
+      <div className="ms-auto d-flex">
+        <Button 
+          variant="warning" 
+          className="me-2" 
+          onClick={() => navigate(`/editcontact/${contact.id}`)} // Redirigir a editar
+        >
+          ✏️
+        </Button>
+        <Button variant="danger" onClick={onDelete}>
+          ❌
+        </Button>
+      </div>
+    </Card>
   );
 };
 
