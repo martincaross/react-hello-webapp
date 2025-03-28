@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Card } from "react-bootstrap";
-import useGlobalReducer from "../hooks/useGlobalReducer";  // Importar el hook del estado global
+import useGlobalReducer from "../hooks/useGlobalReducer"; 
 
 const AddContact = () => {
-  const { store } = useGlobalReducer();  // Obtener el estado global
+  const { store } = useGlobalReducer();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -35,7 +35,7 @@ const AddContact = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Contacto agregado:", data);
-        navigate("/"); // Redirige a la lista de contactos
+        navigate("/");
       })
       .catch((error) => console.error("Error al agregar contacto:", error));
   };

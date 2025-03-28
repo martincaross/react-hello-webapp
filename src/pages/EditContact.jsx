@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Card } from "react-bootstrap";
-import useGlobalReducer from "../hooks/useGlobalReducer";  // Importar el hook del estado global
+import useGlobalReducer from "../hooks/useGlobalReducer"; 
 
 const EditContact = () => {
-  const { id } = useParams(); // Captura el ID de la URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -13,23 +13,21 @@ const EditContact = () => {
     address: "",
   });
 
-  const { store } = useGlobalReducer();  // Obtener el estado global
+  const { store } = useGlobalReducer();
 
   useEffect(() => {
     if (!store.selectedAgenda) {
       alert("No se ha seleccionado una agenda.");
-      navigate("/");  // Redirige al listado si no hay agenda seleccionada
+      navigate("/");
       return;
     }
 
-    // Fetch para obtener los contactos de la agenda seleccionada
     fetch(`https://playground.4geeks.com/contact/agendas/${store.selectedAgenda}/contacts`)
       .then((res) => {
         if (!res.ok) throw new Error(`Error HTTP! Estado: ${res.status}`);
         return res.json();
       })
       .then((data) => {
-        // Buscar el contacto que coincida con el ID
         const selectedContact = data.contacts.find(contact => contact.id === parseInt(id));
 
         if (selectedContact) {
@@ -44,7 +42,7 @@ const EditContact = () => {
         }
       })
       .catch((error) => console.error("Error al cargar contacto:", error));
-  }, [id, store.selectedAgenda]);  // Re-depende de `store.selectedAgenda`
+  }, [id, store.selectedAgenda]); 
 
   const handleChange = (event) => {
     setFormData({
@@ -56,13 +54,11 @@ const EditContact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Verificar que hay una agenda seleccionada
     if (!store.selectedAgenda) {
       alert("No se ha seleccionado una agenda.");
       return;
     }
 
-    // Enviar el PUT request para editar el contacto
     fetch(`https://playground.4geeks.com/contact/agendas/${store.selectedAgenda}/contacts/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

@@ -1,6 +1,6 @@
 export const initialStore = () => {
   return {
-    selectedAgenda: "mi_agenda",  // Mantener la agenda seleccionada
+    selectedAgenda: "mi_agenda",
     contacts: [],
   };
 };
@@ -10,7 +10,7 @@ export default function storeReducer(store, action = {}) {
     case "SET_SELECTED_AGENDA":
       return {
         ...store,
-        selectedAgenda: action.payload,  // Guardar la agenda seleccionada
+        selectedAgenda: action.payload, 
       };
     default:
       throw Error("Unknown action.");

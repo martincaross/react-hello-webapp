@@ -10,10 +10,7 @@ import EditContact from "./pages/EditContact";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
-
-      {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
       <Route path= "/" element={<Contact />} />
       <Route path="/addcontact" element={ <AddContact />} />
       <Route path="/editcontact/:id" element={<EditContact />} />

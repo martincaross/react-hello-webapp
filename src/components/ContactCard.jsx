@@ -1,13 +1,12 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import { useNavigate } from "react-router-dom";
 
 const ContactCard = ({ contact, onDelete }) => {
-  const navigate = useNavigate(); // Hook para la navegación
+  const navigate = useNavigate();
 
   return (
     <Card className="d-flex flex-row align-items-center p-4 mb-3 shadow-sm">
-      {/* Imagen a la izquierda */}
       <img
         src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
         alt="Contact"
@@ -15,7 +14,6 @@ const ContactCard = ({ contact, onDelete }) => {
         style={{ width: "100px", height: "100px" }}
       />
 
-      {/* Información del contacto */}
       <div className="flex-grow-1">
         <h5 className="mb-1">{contact.name}</h5>
         <p className="mb-1 text-muted">{contact.address}</p>
@@ -23,12 +21,11 @@ const ContactCard = ({ contact, onDelete }) => {
         <p className="mb-1">{contact.email}</p>
       </div>
 
-      {/* Botones a la derecha */}
       <div className="ms-auto d-flex">
         <Button 
           variant="warning" 
           className="me-2" 
-          onClick={() => navigate(`/editcontact/${contact.id}`)} // Redirigir a editar
+          onClick={() => navigate(`/editcontact/${contact.id}`)}
         >
           ✏️
         </Button>
